@@ -1,0 +1,40 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main  # You can specify any branch here (e.g., 'main' or 'master')
+  pull_request:
+    branches:
+      - main  # Trigger action for pull requests to the 'main' branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Check out the repository
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    # Set up Docker Buildx (this is needed for multi-platform support)
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    # Log in to Docker Hub (or GitHub Container Registry)
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: "aswinnsuriya"  # Docker username stored in GitHub Secrets
+        password: "aswinn95$$"  # Docker password or token stored in GitHub Secrets
+
+    # Build the Docker image using the Dockerfile
+    - name: Build Docker image
+      run: |
+        docker build -t aswinnsuriya/icarus .
+
+    # Optionally push the image to Docker Hub (or GitHub Container Registry)
+    - name: Push Docker image
+      run: |
+        docker push aswinnsuriya/icarus
+
